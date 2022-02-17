@@ -31,6 +31,7 @@ import (
 )
 
 const kubernetesVersionCacheKey = "kubernetesVersion"
+const amiID = "ami-06efe6b9d402e8674"
 
 type AMIProvider struct {
 	cache     *cache.Cache
@@ -71,6 +72,9 @@ func (p *AMIProvider) Get(ctx context.Context, constraints *v1alpha1.Constraints
 }
 
 func (p *AMIProvider) getAMIID(ctx context.Context, query string) (string, error) {
+	if query == "/aws/service/eks/optimized-ami/1.21/amazon-linux-2/recommended/image_id" {
+		return amiID, nil
+	}
 	if id, ok := p.cache.Get(query); ok {
 		return id.(string), nil
 	}
